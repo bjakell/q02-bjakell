@@ -22,6 +22,9 @@
 **/
 Piezas::Piezas()
 {
+   board = std::vector< std::vector<Piece> >(BOARD_ROWS, std::vector<Piece>(BOARD_COLS, Blank));
+   
+   turn = X;
 }
 
 /**
@@ -30,6 +33,13 @@ Piezas::Piezas()
 **/
 void Piezas::reset()
 {
+   for(int i = 0; i < BOARD_ROWS; i++)
+   {
+      for(int j = 0; j < BOARD_COLS; j++)
+      {
+         board[i][j] = Blank;
+      }
+   }
 }
 
 /**
@@ -42,7 +52,52 @@ void Piezas::reset()
 **/ 
 Piece Piezas::dropPiece(int column)
 {
-    return Blank;
+    Piece temp = turn;
+    
+   //Out of bounds
+   if(column < 0 || column > 4)
+   {
+      return Invalid;  
+   }
+   
+   //Place piece and check for full column
+   Piece test = pieceAt(2, column);
+   if(test == Blank)
+   {
+      board[2][column] = turn;
+   }
+   else
+   {
+      test = pieceAt(1, column);
+      if(test == Blank)
+      {
+         board[1][column] = turn;
+      }
+      else
+      {
+         test = pieceAt(0, column);
+         if(test == Blank)
+         {
+            board[0][column] = turn;
+         }
+         else
+         {
+            return Invalid;
+         }
+      }
+   }
+   
+   //Toggle turn
+   if(turn == X)
+   {
+      turn = O;
+   }
+   else if(turn == O) //Hard code the other turn in case of invalid or blank value
+   {
+      turn = X;
+   }
+   
+   return temp;
 }
 
 /**
@@ -51,7 +106,14 @@ Piece Piezas::dropPiece(int column)
 **/
 Piece Piezas::pieceAt(int row, int column)
 {
-    return Blank;
+   //Out of bounds
+   if((row < 0 || row > 4) || (column < 0 || column > 3))
+   {
+      return Invalid;
+   }
+   
+   //Return piece
+   return board[row][column];
 }
 
 /**
@@ -65,5 +127,29 @@ Piece Piezas::pieceAt(int row, int column)
 **/
 Piece Piezas::gameState()
 {
-    return Blank;
+   int numX = 0;
+   int numO = 0;
+   
+   //Check rows
+   for(int i = 0; i < BOARD_ROWS; i++)
+   {
+      for(int j = 0; j < BOARD_COLS; j++)
+      {
+         Piece check = pieceAt(i, j);
+         if(check == X)
+         {
+            numX += 1;
+         }
+         else if(check == O)
+         {
+            numO += 1;
+         }
+         else //Game is not over
+         {
+            return Invalid;
+         }
+      }
+   }
+   
+   
 }
