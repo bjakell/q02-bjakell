@@ -129,8 +129,10 @@ Piece Piezas::gameState()
 {
    int numX = 0;
    int numO = 0;
+   int maxXs = 0;
+   int maxOs = 0;
    
-   //Check rows
+   //Check rows first, larger than columns
    for(int i = 0; i < BOARD_ROWS; i++)
    {
       for(int j = 0; j < BOARD_COLS; j++)
@@ -149,7 +151,63 @@ Piece Piezas::gameState()
             return Invalid;
          }
       }
+      
+      if(maxXs < numX)
+      {
+         maxXs = numX;
+      }
+      
+      if(maxOs < numO)
+      {
+         maxOs = numO;
+      }
+      
+      numX = numO = 0;
    }
    
+   //Check columns
+   for(int j = 0; j < BOARD_COLS; j++)
+   {
+      for(int i = 0; i < BOARD_ROWS; i++)
+      {
+         Piece check = pieceAt(i, j);
+         if(check == X)
+         {
+            numX += 1;
+         }
+         else if(check == O)
+         {
+            numO += 1;
+         }
+         else //Game is not over
+         {
+            return Invalid;
+         }
+      }
+      
+      if(maxXs < numX)
+      {
+         maxXs = numX;
+      }
+      
+      if(maxOs < numO)
+      {
+         maxOs = numO;
+      }
+      
+      numX = numO = 0;
+   }
    
+   if(maxOs > maxXs) //O wins
+   {
+      return O;
+   }
+   else if(maxXs > maxOs) //X wins
+   {
+      return X;
+   }
+   else //No winner
+   {
+      return Blank;
+   }
 }

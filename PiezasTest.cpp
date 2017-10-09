@@ -577,4 +577,100 @@ TEST(PiezasTest, reset)
 	ASSERT_EQ(Blank, test);
 }
 
+TEST(PiezasTest, IncompleteGame)
+{
+	Piezas board;
+	
+	board.dropPiece(0);
+	board.dropPiece(1);
+	board.dropPiece(2);
+	board.dropPiece(3);
+	board.dropPiece(0);
+	board.dropPiece(3);
+
+	Piece winner = board.gameState();
+	
+	ASSERT_EQ(Invalid, winner);
+}
+
+/**
+ *	X  O  O  O
+ *	X  X  X  X
+ *  O  O  X  O
+ **/
+ 
+TEST(PiezasTest, HorizontalWinner)
+{
+	Piezas board;
+	
+	board.dropPiece(2);
+	board.dropPiece(0);
+	board.dropPiece(0);
+	board.dropPiece(1);
+	board.dropPiece(1);
+	board.dropPiece(3);
+	board.dropPiece(2);
+	board.dropPiece(1);
+	board.dropPiece(3);
+	board.dropPiece(2);
+	board.dropPiece(0);
+	board.dropPiece(3);
+	Piece winner = board.gameState();
+	
+	ASSERT_EQ(X, winner);
+}
+
+/**
+ *	X  O  O  O
+ *	X  X  X  O
+ *  X  O  X  O
+ **/
+ 
+TEST(PiezasTest, GameStateTie)
+{
+	Piezas board;
+	
+	board.dropPiece(0);
+	board.dropPiece(1);
+	board.dropPiece(2);
+	board.dropPiece(3);
+	board.dropPiece(0);
+	board.dropPiece(3);
+	board.dropPiece(1);
+	board.dropPiece(1);
+	board.dropPiece(2);
+	board.dropPiece(2);
+	board.dropPiece(0);
+	board.dropPiece(3);
+	Piece winner = board.gameState();
+	
+	ASSERT_EQ(Blank, winner);
+}
+
+/**
+ *	X  X  O  O
+ *	O  X  O  X
+ *  X  O  O  X
+ **/
+ 
+TEST(PiezasTest, VerticalWinner)
+{
+	Piezas board;
+	
+	board.dropPiece(0);
+	board.dropPiece(1);
+	board.dropPiece(3);
+	board.dropPiece(2);
+	board.dropPiece(1);
+	board.dropPiece(0);
+	board.dropPiece(3);
+	board.dropPiece(2);
+	board.dropPiece(0);
+	board.dropPiece(2);
+	board.dropPiece(1);
+	board.dropPiece(3);
+	Piece winner = board.gameState();
+	
+	ASSERT_EQ(O, winner);
+}
 
